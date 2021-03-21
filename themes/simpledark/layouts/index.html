@@ -1,0 +1,10 @@
+{{ define "main" }}
+
+{{ range .Data.Pages }}
+<div>
+  <!-- list.htmlを読み込む -->
+  {{ .Render "list"}}
+</div>
+{{ end }}
+
+{{ end }}

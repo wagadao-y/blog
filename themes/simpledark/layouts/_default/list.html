@@ -1,0 +1,7 @@
+{{ range .Pages }}
+<a href="{{.Permalink}}">
+  <div class="card">
+    <p>{{.Date.Format "2006-01-02"}} | {{.Title}}</p>
+  </div>
+</a>
+{{ end }}
