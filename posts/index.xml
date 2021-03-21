@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on mitsuki-n's Blog</title><link>https://mitsuki-n.github.io/blog/posts/</link><description>Recent content in Posts on mitsuki-n's Blog</description><generator>Hugo -- gohugo.io</generator><language>ja</language><lastBuildDate>Sun, 07 Mar 2021 01:00:00 +0900</lastBuildDate><atom:link href="https://mitsuki-n.github.io/blog/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>Quartus Prime LEでもVHDL-2008が使える？</title><link>https://mitsuki-n.github.io/blog/posts/2021-03-07-02/</link><pubDate>Sun, 07 Mar 2021 01:00:00 +0900</pubDate><guid>https://mitsuki-n.github.io/blog/posts/2021-03-07-02/</guid><description>Quartus Primeダウンロードページの比較表をみると、Lite EditionはVHDL-2008が使えない模様。…と、思っていたらQuartus Prime LEのプロジェクト設定を開くとVHDL-2008が選択できることを発見。
+適当にVHDL-2008の構文(process(all))を含むファイルをコンパイルしたところ、普通にFitterまで実行できてしまった。というわけで、Quartus Prime LEでもVHDL-2008が使えるっぽい。
+library ieee; use ieee.std_logic_1164.all; use ieee.std_logic_arith.all; use ieee.std_logic_unsigned.all; entity uart_tx is port ( clk : in std_logic; rst_n : in std_logic ); end entity; architecture rtl of uart_tx is type reg_type is record data : std_logic_vector(7 downto 0); end record; signal r, rin : reg_type; begin comb : process (all) begin rin &amp;lt;= r; rin.data &amp;lt;= r.data + &amp;#34;00000001&amp;#34;; end process; reg : process (clk, rst_n) begin if rst_n = &amp;#39;1&amp;#39; then elsif rising_edge(clk) then r &amp;lt;= rin; end if; end process; end architecture;</description></item><item><title>[Rust]error: linker ‘link.exe’ not found への対処法</title><link>https://mitsuki-n.github.io/blog/posts/2021-03-07-01/</link><pubDate>Sun, 07 Mar 2021 00:00:00 +0900</pubDate><guid>https://mitsuki-n.github.io/blog/posts/2021-03-07-01/</guid><description>Rustでビルドしたときに出たエラーの対処法。
+error: linker `link.exe` not found | = note: 指定されたファイルが見つかりません。 (os error 2) note: the msvc targets depend on the msvc linker but `link.exe` was not found note: please ensure that VS 2013, VS 2015, VS 2017 or VS 2019 was installed with the Visual C++ option 内容はエラーログに書いてあるとおりで、VisualStudio2013以降のC++ビルドツールが必要とのこと。
+VisualStudioのインストーラで次の項目をチェックしてインストールすればOK。
+VS 2019 C++ x64/x86 ビルドツール Windows 10 SDK</description></item><item><title>VirtualBox ゲストOSがUbuntuでのファイル共有</title><link>https://mitsuki-n.github.io/blog/posts/2021-02-14/</link><pubDate>Sun, 14 Feb 2021 00:00:00 +0900</pubDate><guid>https://mitsuki-n.github.io/blog/posts/2021-02-14/</guid><description>VirtualBoxでWindows10とUbuntu間のファイル共有
+上の記事の内容でファイル共有できた。
+VirtualBoxのホーム画面→「設定」→「共有フォルダー」を開く 自動マウント、永続化で共有フォルダのパスを設定 Ubuntu側で「sudo apt install virtualbox-guest-utils」 これで、/media/sf_[設定した共有フォルダ名]が自動的に作成される。
+再起動しても自動的にマウントされていたので、mount.vboxsfを実行しなくても問題ないっぽい？</description></item><item><title>Windows10でC/C++開発環境を構築した</title><link>https://mitsuki-n.github.io/blog/posts/2021-02-07/</link><pubDate>Sun, 07 Feb 2021 00:00:00 +0900</pubDate><guid>https://mitsuki-n.github.io/blog/posts/2021-02-07/</guid><description>VSCodeはインストール済みなので、あとはこのページの手順に従ってC/C++の開発環境を構築した。
+VSCode + MicrosoftのC/C++拡張機能導入 MinGWでgccの導入 https://code.visualstudio.com/docs/cpp/config-mingw
+とりあえずHelloWorldまで動かして、GDBでブレークポイントを設定できることも確認した。
+ところで、ヒット数を条件としたブレークポイントが機能していないことに気がついた。
+VSCodeの拡張機能のバグっぽい？うーむ…
+https://github.com/microsoft/vscode-cpptools/issues/714</description></item><item><title>Verilogの別ファイルの定義にジャンプできるVSCodeの拡張機能を作った</title><link>https://mitsuki-n.github.io/blog/posts/2021-01-17/</link><pubDate>Sun, 17 Jan 2021 00:00:00 +0900</pubDate><guid>https://mitsuki-n.github.io/blog/posts/2021-01-17/</guid><description>VSCodeのVerilog-HDLの拡張機能はとても便利なのだが、別ファイルのモジュールへの定義ジャンプが出来なかった。なので別ファイルの定義ジャンプだけの拡張機能を作成した。
+下記リポジトリのvsixファイルをVSCodeにインストールすればOK。 https://github.com/mitsuki-n/vscode-verilog-definitionjump</description></item><item><title>VSCode拡張機能のパッケージ化</title><link>https://mitsuki-n.github.io/blog/posts/2021-01-16/</link><pubDate>Sat, 16 Jan 2021 00:00:00 +0900</pubDate><guid>https://mitsuki-n.github.io/blog/posts/2021-01-16/</guid><description> README.mdを何でも良いので変更する(初回のみ) package.jsonにpublisherを追加する(初回のみ) package.jsonのversionを更新する vsce packageを実行してvsixファイルを生成する</description></item><item><title>.gitignoreについて調べる</title><link>https://mitsuki-n.github.io/blog/posts/2021-01-04/</link><pubDate>Mon, 04 Jan 2021 00:00:00 +0900</pubDate><guid>https://mitsuki-n.github.io/blog/posts/2021-01-04/</guid><description>yo codeで生成したVSCode拡張機能のフォルダを整理していたら、Gitの更新対象が大量に出てきたので調べた。
+調べた結果 Gitの設定ファイルである.gitignoreを削除したことが原因だった。 .gitignoreはGitで管理しないファイル及びフォルダを指定するための設定ファイルとのこと。
+今回の件だと、.gitignoreに記載されていたnode_modulesフォルダがGitの管理対象になってしまったことでGitの更新対象が大量にでてきたというわけだ。
+ところで、どんなファイルとフォルダを.gitignoreに記載すればいいのか気になったので調べてみると下記とのこと。
+/node_modulesまたは/packagesの内容などの依存関係キャッシュ
+.o、.pyc、および.classファイルなどのコンパイル済みコード
+/bin、/out、/targetなどの出力ディレクトリを構築する
+.log、.lock、.tmpなど、実行時に生成されるファイル
+.DS_StoreやThumbs.dbなどの隠しシステムファイル
+.idea/workspace.xmlなどのpersonal IDE設定ファイル
+正確には.gitignoreとは何ですか？
+参考ページ .gitignore の書き方
+[Git] .gitignoreの仕様詳解</description></item><item><title>Verilogのインデントを自動整形するVSCodeの拡張機能を作った</title><link>https://mitsuki-n.github.io/blog/posts/2021-01-02/</link><pubDate>Sat, 02 Jan 2021 00:00:00 +0900</pubDate><guid>https://mitsuki-n.github.io/blog/posts/2021-01-02/</guid><description>以前作ったVerilogの自動整形スクリプトだけど、いちいち実行するのも面倒だったのでVSCodeの拡張機能として作り直した。 Verilog(.v)とSystemVerilog(.sv)のファイル保存時に自動的に整形してくれるようになった。
+下記リポジトリのverilogindenter-0.0.x.vsixをVSCodeにインストールすれば動くはず。
+https://github.com/mitsuki-n/vscode-verilog-indenter</description></item><item><title>VSCode拡張機能開発　現在開いているドキュメントのテキスト取得方法</title><link>https://mitsuki-n.github.io/blog/posts/2020-12-30/</link><pubDate>Wed, 30 Dec 2020 00:00:00 +0900</pubDate><guid>https://mitsuki-n.github.io/blog/posts/2020-12-30/</guid><description>document.getText(取得範囲)でドキュメントのテキストを取得できる。
+extension.ts export function activate(context: vscode.ExtensionContext) { let disposable = vscode.commands.registerCommand(&amp;#39;helloworld.helloWorld&amp;#39;, () =&amp;gt; { const editor = vscode.window.activeTextEditor; if(editor){ const document = editor.document; // 現在開いているドキュメント全体の文字列を取得 const firstLine = document.lineAt(0); const lastLine = document.lineAt(document.lineCount - 1); const textRange = new vscode.Range(firstLine.range.start, lastLine.range.end); const text = document.getText(textRange); console.log(text); } }); context.subscriptions.push(disposable); } 参考ページ
+VSCode公式の拡張機能開発チュートリアル yo codeで生成したHelloWorld拡張機能のextension.tsの上記部分を書き換えればOK
+https://code.visualstudio.com/api/get-started/your-first-extension
+VSCodeで開いているドキュメント全体の範囲を取得する方法
+https://stackoverflow.com/questions/45203543/vs-code-extension-api-to-get-the-range-of-the-whole-text-of-a-document</description></item><item><title>Verilogのインデントを自動整形するPythonスクリプトを書いた</title><link>https://mitsuki-n.github.io/blog/posts/2020-12-13/</link><pubDate>Sun, 13 Dec 2020 00:00:00 +0900</pubDate><guid>https://mitsuki-n.github.io/blog/posts/2020-12-13/</guid><description>Verilog のコードでインデントだけを整形してくれるフォーマッタが欲しいと思ったので作った。
+使い方は引数に整形したいファイルを指定して実行すればok。
+てすと
+https://github.com/mitsuki-n/verilog-indenter
+./verilog-indent.py [整形したい Verilog ファイル名] 整形前
+module counter( input CLK, input RESET, output reg [31:0] COUNT ); always @(posedge CLK) begin if (RESET == 1&amp;#39;b1) begin COUNT &amp;lt;= 32&amp;#39;d0; end else begin COUNT &amp;lt;= COUNT + 32&amp;#39;d1; endcount end end endmodule 整形後
+module counter( input CLK, input RESET, output reg [31:0] COUNT ); always @(posedge CLK) begin if (RESET == 1&amp;#39;b1) begin COUNT &amp;lt;= 32&amp;#39;d0; end else begin COUNT &amp;lt;= COUNT + 32&amp;#39;d1; end end endmodule VS Code と連携させてファイル保存時に自動整形とかさせたい…</description></item></channel></rss>
