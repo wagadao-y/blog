@@ -1,6 +1,6 @@
 baseURL = "https://wagadao-y.github.io/blog/"
 languageCode = "ja"
-title = "mitsuki-n's Blog"
+title = "wagadao-y's Blog"
 theme = "simpledark"
 canonifyurls = true
 
