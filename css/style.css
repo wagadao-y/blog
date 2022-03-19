@@ -82,6 +82,10 @@ blockquote cite {
   font-size: 0.9em;
 }
 
+body {
+  overflow-y: scroll;
+}
+
 #instantclick {
   display: none;
 }
