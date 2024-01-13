@@ -1,0 +1,35 @@
+<!doctype html><html lang=ja><head><meta charset=utf-8><title>wagadao-y's Blog</title><link rel=stylesheet href=https://wagadao-y.github.io/blog/css/reset.css><link rel=stylesheet href=https://wagadao-y.github.io/blog/css/style.css></head><body><header><a href=https://wagadao-y.github.io/blog/index.html class=header-title><div>wagadao-y's Blog</div></a></header><main><article><h1>[AWS IoT Core] Pythonのpaho-mqttで接続してみる</h1><p>AWS IoT CoreはIoTデバイスをAWSクラウドに接続するためのサービスです。<br>PythonからIoT Coreに接続するための方法として、<a href=https://github.com/aws/aws-iot-device-sdk-python-v2#aws-iot-device-sdk-v2-for-python>AWS IoT Device SDK for Python</a>
+が提供されていますが、今回はPCからPythonのpaho-mqttを使って接続してみます。</p><h2 id=実行環境>実行環境</h2><p>OS : Windows 11 Home 23H2<br>Python : 3.10.11<br>paho-mqtt : 1.6.1</p><h2 id=aws側の設定>AWS側の設定</h2><p>まずは<a href=https://docs.aws.amazon.com/ja_jp/iot/latest/developerguide/create-iot-resources.html>AWS IoTリソースの作成</a>に従って、AWS側を設定していきます。<br>AWS IoTコンソールの「デバイスの接続」から作成しても良いですが、ドキュメントに従って進めます。</p><h3 id=ポリシーの作成>ポリシーの作成</h3><p>こんな感じで<code>MyPC-Iot_Policy</code>ポリシーを作成。
+<code>${iot:Connection.Thing.ThingName}</code>はポリシー変数で紐づけたモノの名前として評価されるようです。<br>subscribeにはtopicfilterを設定しました（topic指定では動かなかった）</p><pre tabindex=0><code>{
+  &#34;Version&#34;: &#34;2012-10-17&#34;,
+  &#34;Statement&#34;: [
+    {
+      &#34;Effect&#34;: &#34;Allow&#34;,
+      &#34;Action&#34;: &#34;iot:Connect&#34;,
+      &#34;Resource&#34;: &#34;arn:aws:iot:ap-northeast-1:584353810655:client/${iot:Connection.Thing.ThingName}&#34;
+    },
+    {
+      &#34;Effect&#34;: &#34;Allow&#34;,
+      &#34;Action&#34;: [
+        &#34;iot:Publish&#34;,
+        &#34;iot:Receive&#34;
+      ],
+      &#34;Resource&#34;: &#34;arn:aws:iot:ap-northeast-1:584353810655:topic/${iot:Connection.Thing.ThingName}*&#34;
+    },
+    {
+      &#34;Effect&#34;: &#34;Allow&#34;,
+      &#34;Action&#34;: &#34;iot:Subscribe&#34;,
+      &#34;Resource&#34;: &#34;arn:aws:iot:ap-northeast-1:584353810655:topicfilter/${iot:Connection.Thing.ThingName}*&#34;
+    }
+  ]
+}
+</code></pre><h3 id=モノの作成>モノの作成</h3><p>モノの名前を<code>MyPC</code>、証明書は「新しい証明書を自動生成する (推奨)」を選択し、<code>MyPC-Iot_Policy</code>ポリシーにアタッチ。<br>モノの作成後に証明書ファイル一式をダウンロードして、次のファイル名にリネームしました。</p><p>プライベートキー : private.pem.key<br>デバイス証明書 : certificate.pem.crt<br>ルートCA証明書 : Amazon-root-CA-1.pem</p><p>※証明書ファイルは作成時以外ではダウンロードできないため、ファイルをなくした場合は証明書を作り直す必要があります。</p><h3 id=iot-coreのデバイスデータエンドポイント確認>IoT Coreのデバイスデータエンドポイント確認</h3><p>AWS IoTコンソール左下の設定から、MQTTの接続先となるデバイスデータエンドポイントを確認します。<br><img src=https://wagadao-y.github.io/blog/img/2024-01-13-1.png alt="Alt text"></p><h2 id=pahoでiot-coreに接続する>PahoでIoT Coreに接続する</h2><p>下記を参考にIoT Coreに接続してみます。<br><a href=https://aws.amazon.com/jp/blogs/iot/use-aws-iot-core-mqtt-broker-with-standard-mqtt-libraries/>Use AWS IoT Core MQTT broker with standard MQTT libraries</a><br><a href=https://github.com/eclipse/paho.mqtt.python>Pahoのリポジトリ</a><br><a href=https://gist.github.com/skirdey/9cdead881799a47742ff3cd296d06cc1>GitHub skirdey/pubsub_iot.py</a></p><p>作成したPythonスクリプトは下記です。<br><a href=https://github.com/wagadao-y/aws-iotcore-experiment-pahomqtt>https://github.com/wagadao-y/aws-iotcore-experiment-pahomqtt</a></p><p>AWS IoTコンソールのMQTTテストクライアントで<code>MyPC/test-topic</code>をサブスクライブします。<br>スクリプトを実行して、テストクライアントでメッセージ送受信できることを確認します。</p><pre tabindex=0><code>&gt; pip install paho-mqtt
+&gt; python .\paho-client.py &#34;xxxxxxxxxx-ats.iot.ap-northeast-1.amazonaws.com&#34;
+Connected with result code Success
+Received MyPC/test-topic b&#39;{&#34;message&#34;:&#34;Hello from MyPC&#34;}&#39;
+Received MyPC/test-topic b&#39;{&#34;message&#34;:&#34;Hello from MyPC&#34;}&#39;
+Received MyPC/test-topic b&#39;{&#34;message&#34;:&#34;Hello from MyPC&#34;}&#39;
+Received MyPC/test-topic b&#39;{&#34;message&#34;:&#34;Hello from MyPC&#34;}&#39;
+Received MyPC/test-topic b&#39;{\n  &#34;message&#34;: &#34;Hello from AWS IoT console&#34;\n}&#39;
+</code></pre><p><img src=https://wagadao-y.github.io/blog/img/2024-01-13-2.png alt="Alt text"></p><p>参考：<a href=https://docs.aws.amazon.com/ja_jp/whitepapers/latest/designing-mqtt-topics-aws-iot-core/mqtt-design-best-practices.html>MQTT設計のベストプラクティス</a></p></article></main><script src=js/instantclick.min.js data-no-instant></script>
+<script data-no-instant>InstantClick.init(50)</script></body></html>
