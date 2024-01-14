@@ -1,0 +1,11 @@
+<!doctype html><html lang=ja><head><meta charset=utf-8><title>wagadao-y's Blog</title><link rel=stylesheet href=https://wagadao-y.github.io/blog/css/reset.css><link rel=stylesheet href=https://wagadao-y.github.io/blog/css/style.css></head><body><header><a href=https://wagadao-y.github.io/blog/index.html class=header-title><div>wagadao-y's Blog</div></a></header><main><article><h1>[AWS IoT Core] Node.js + MQTT.jsで接続してみる</h1><p><a href=https://wagadao-y.github.io/blog/posts/2024-01-13>前回はPythonのPahoでIoT Coreに接続しました</a>ので、今回はNode.js + MQTT.jsを使って接続してみます。</p><h2 id=実行環境>実行環境</h2><p>OS : Windows 11 Home 23H2<br>Node.js : v20.10.0<br>MQTT.js : 5.3.4</p><h2 id=aws側の設定>AWS側の設定</h2><p><a href=https://wagadao-y.github.io/blog/posts/2024-01-13>前回</a>と同じなので省略</p><h2 id=pahoでiot-coreに接続する>PahoでIoT Coreに接続する</h2><p>下記を参考にIoT Coreに接続してみます。<br><a href=https://aws.amazon.com/jp/blogs/iot/use-aws-iot-core-mqtt-broker-with-standard-mqtt-libraries/>Use AWS IoT Core MQTT broker with standard MQTT libraries</a><br><a href=https://github.com/mqttjs/MQTT.js>MQTT.jsのリポジトリ</a></p><p>作成したスクリプトは下記です。<br><a href=https://github.com/wagadao-y/aws-iotcore-experiment-mqttjs>https://github.com/wagadao-y/aws-iotcore-experiment-mqttjs</a></p><p>AWS IoTコンソールのMQTTテストクライアントで<code>MyPC/test-topic</code>をサブスクライブします。<br>スクリプトを実行して、テストクライアントでメッセージ送受信できることを確認します。</p><pre tabindex=0><code>&gt; npm install
+&gt; node index.js  &#34;xxxxxxxxxx-ats.iot.ap-northeast-1.amazonaws.com&#34;
+Connected
+Received MyPC/test-topic {&#34;message&#34;:&#34;Hello from MyPC MQTT.js&#34;}
+Received MyPC/test-topic {&#34;message&#34;:&#34;Hello from MyPC MQTT.js&#34;}
+Received MyPC/test-topic {&#34;message&#34;:&#34;Hello from MyPC MQTT.js&#34;}
+Received MyPC/test-topic {
+  &#34;message&#34;: &#34;Hello from AWS IoT console&#34;
+}
+</code></pre></article></main><script src=js/instantclick.min.js data-no-instant></script>
+<script data-no-instant>InstantClick.init(50)</script></body></html>

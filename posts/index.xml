@@ -1,4 +1,16 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on wagadao-y's Blog</title><link>https://wagadao-y.github.io/blog/posts/</link><description>Recent content in Posts on wagadao-y's Blog</description><generator>Hugo -- gohugo.io</generator><language>ja</language><lastBuildDate>Sat, 13 Jan 2024 15:37:48 +0900</lastBuildDate><atom:link href="https://wagadao-y.github.io/blog/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>[AWS IoT Core] Pythonのpaho-mqttで接続してみる</title><link>https://wagadao-y.github.io/blog/posts/2024-01-13/</link><pubDate>Sat, 13 Jan 2024 15:37:48 +0900</pubDate><guid>https://wagadao-y.github.io/blog/posts/2024-01-13/</guid><description>AWS IoT CoreはIoTデバイスをAWSクラウドに接続するためのサービスです。
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on wagadao-y's Blog</title><link>https://wagadao-y.github.io/blog/posts/</link><description>Recent content in Posts on wagadao-y's Blog</description><generator>Hugo -- gohugo.io</generator><language>ja</language><lastBuildDate>Sun, 14 Jan 2024 16:53:47 +0900</lastBuildDate><atom:link href="https://wagadao-y.github.io/blog/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>[AWS IoT Core] Node.js + MQTT.jsで接続してみる</title><link>https://wagadao-y.github.io/blog/posts/2024-01-14/</link><pubDate>Sun, 14 Jan 2024 16:53:47 +0900</pubDate><guid>https://wagadao-y.github.io/blog/posts/2024-01-14/</guid><description>前回はPythonのPahoでIoT Coreに接続しましたので、今回はNode.js + MQTT.jsを使って接続してみます。
+実行環境 OS : Windows 11 Home 23H2
+Node.js : v20.10.0
+MQTT.js : 5.3.4
+AWS側の設定 前回と同じなので省略
+PahoでIoT Coreに接続する 下記を参考にIoT Coreに接続してみます。
+Use AWS IoT Core MQTT broker with standard MQTT libraries
+MQTT.jsのリポジトリ
+作成したスクリプトは下記です。
+https://github.com/wagadao-y/aws-iotcore-experiment-mqttjs
+AWS IoTコンソールのMQTTテストクライアントでMyPC/test-topicをサブスクライブします。
+スクリプトを実行して、テストクライアントでメッセージ送受信できることを確認します。
+&amp;gt; npm install &amp;gt; node index.js &amp;#34;xxxxxxxxxx-ats.iot.ap-northeast-1.amazonaws.com&amp;#34; Connected Received MyPC/test-topic {&amp;#34;message&amp;#34;:&amp;#34;Hello from MyPC MQTT.js&amp;#34;} Received MyPC/test-topic {&amp;#34;message&amp;#34;:&amp;#34;Hello from MyPC MQTT.js&amp;#34;} Received MyPC/test-topic {&amp;#34;message&amp;#34;:&amp;#34;Hello from MyPC MQTT.js&amp;#34;} Received MyPC/test-topic { &amp;#34;message&amp;#34;: &amp;#34;Hello from AWS IoT console&amp;#34; }</description></item><item><title>[AWS IoT Core] Pythonのpaho-mqttで接続してみる</title><link>https://wagadao-y.github.io/blog/posts/2024-01-13/</link><pubDate>Sat, 13 Jan 2024 15:37:48 +0900</pubDate><guid>https://wagadao-y.github.io/blog/posts/2024-01-13/</guid><description>AWS IoT CoreはIoTデバイスをAWSクラウドに接続するためのサービスです。
 PythonからIoT Coreに接続するための方法として、AWS IoT Device SDK for Python が提供されていますが、今回はPCからPythonのpaho-mqttを使って接続してみます。
 実行環境 OS : Windows 11 Home 23H2
 Python : 3.10.11
