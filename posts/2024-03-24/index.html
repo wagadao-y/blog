@@ -1,0 +1,57 @@
+<!doctype html><html lang=ja><head><meta charset=utf-8><title>wagadao-y's Blog</title><link rel=stylesheet href=https://wagadao-y.github.io/blog/css/reset.css><link rel=stylesheet href=https://wagadao-y.github.io/blog/css/style.css></head><body><header><a href=https://wagadao-y.github.io/blog/index.html class=header-title><div>wagadao-y's Blog</div></a></header><main><article><h1>ブラウザからCognitoでサインアップ/サインインする</h1><pre tabindex=0><code>import AmazonCognitoIdentity from &#39;amazon-cognito-identity-js&#39;;
+
+const poolData = {
+  UserPoolId: &#39;xx-xxxxxxxxxxx_xxxxxxxxx&#39;, // Your user pool id here
+  ClientId: &#39;xxxxxxxxxxxxxxxxxxxxxxxxxx&#39;, // Your client id here
+};
+const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+
+cognitoSignIn(&#34;hoge2&#34;, &#34;P@ssw0rd&#34;);
+cognitoSignUp(&#34;hoge2&#34;, &#34;P@ssw0rd&#34;);
+
+
+function cognitoSignIn(username, password) {
+  const authenticationData = {
+    Username: username,
+    Password: password
+  };
+  const authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails(authenticationData);
+
+  const userData = {
+    Username: username,
+    Pool: userPool
+  };
+
+  const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
+
+  cognitoUser.authenticateUser(authenticationDetails, {
+    onSuccess: function (result) {
+      // 認証成功時の処理
+      console.log(&#34;認証成功&#34;);
+      console.log(&#34;Access token: &#34; + result.getAccessToken().getJwtToken())
+    },
+    onFailure: function (err) {
+      // 認証失敗時の処理
+      console.log(&#34;認証失敗&#34;);
+      console.log(err);
+    }
+  });
+}
+
+
+function cognitoSignUp(username, password) {
+  const attributeList = [];
+  userPool.signUp(username, password, attributeList, null, function (err, result) {
+    if (err) {
+      console.log(&#34;サインアップ失敗&#34;);
+      console.log(err);
+    }
+    else {
+      const cognitoUser = result.user;
+      console.log(&#34;サインアップ成功&#34;);
+      console.log(cognitoUser.getUsername());
+    }
+  });
+}
+</code></pre></article></main><script src=js/instantclick.min.js data-no-instant></script>
+<script data-no-instant>InstantClick.init(50)</script></body></html>
